@@ -1,0 +1,13 @@
+functional_metric_id,functional_metric_name,product1,product2,product3,product4
+Fm1,Maximum speed,9,1,1,1
+Fm2,Acceleration,9,1,1,1
+Fm3,Role stability in high speed,5,9,5,5
+Fm4,Role stability in low speed,5,9,5,5
+Fm5,Yaw stability in high speed,5,9,5,5
+Fm6,Yaw stability in low speed,5,9,5,5
+Fm7,Reachable Distance in low speed,1,1,9,1
+Fm8,Reachable Distance in high speed,1,1,9,1
+Fm9,Reachable Distance in low speed (cloudy),1,1,9,1
+Fm10,Reachable Distance in high speed (cloudy),1,1,9,1
+Fm11,Minumum turning radius in low speed,1,5,1,9
+Fm12,Minumum turning radius in high speed,1,5,1,9
