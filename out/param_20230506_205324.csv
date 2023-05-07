@@ -1,0 +1,9 @@
+pc,1.0
+pm,0.3
+lmbd,100
+mu,50
+k_tcd,1
+k_pcr,1
+k_scr,1
+k_inh,1
+nrep,20
