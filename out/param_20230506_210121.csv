@@ -1,9 +1,0 @@
-pc,1.0
-pm,0.3
-lmbd,100
-mu,50
-k_tcd,10
-k_pcr,100
-k_scr,1
-k_inh,0.001
-nrep,50
