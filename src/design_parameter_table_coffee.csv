@@ -1,0 +1,8 @@
+design_parameter_id,design_parameter_name,component_id,component_name
+Dp1,産地,Cp1,豆の選定
+Dp2,焙煎度,Cp1,豆の選定
+Dp3,焙煎からの日数,Cp1,豆の選定
+Dp4,粒度,Cp2,グラインド
+Dp5,抽出時間,Cp3,抽出
+Dp6,お湯の温度,Cp3,抽出
+Dp7,お湯の量,Cp3,抽出
