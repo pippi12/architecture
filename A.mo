@@ -216,49 +216,6 @@ package A
       __OpenModelica_commandLineOptions = "");
   end pumpingSystem_ex02;
 
-  model pump_heater
-    replaceable package fluid = Media.Water.StandardWaterOnePhase;
-    inner Modelica.Fluid.System system annotation(
-      Placement(visible = true, transformation(origin = {86, 86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Fluid.Machines.PrescribedPump pump1(redeclare package Medium = fluid, N_nominal = 1750, checkValve = true, energyDynamics = Modelica.Fluid.Types.Dynamics.DynamicFreeInitial, redeclare function flowCharacteristic = Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics.quadraticFlow(V_flow_nominal = {0, 0.034, 0.04}, head_nominal = {39.0, 27.0, 22.8}), m_flow_start = 10, massDynamics = Modelica.Fluid.Types.Dynamics.DynamicFreeInitial, p_b_start = 10*system.p_start, redeclare function powerCharacteristic = Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics.quadraticPower(V_flow_nominal = {0, 0.034, 0.04}, W_nominal = {5000, 14700, 17000}), use_N_in = true, use_powerCharacteristic = true) annotation(
-      Placement(visible = true, transformation(origin = {0, 6}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Blocks.Sources.Ramp ramp(duration = 10, height = 1000, offset = 1000, startTime = 10) annotation(
-      Placement(visible = true, transformation(origin = {-34, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Fluid.Pipes.StaticPipe pipe(redeclare package Medium = fluid, diameter = 0.05, length = 0.5, nParallel = 1) annotation(
-      Placement(visible = true, transformation(origin = {32, 6}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Fluid.Vessels.ClosedVolume volume(redeclare package Medium = fluid, T_start = 15 + 273.15, V = 0.1, nPorts = 2, p_start = 101325, use_HeatTransfer = false, use_T_start = true, use_portsData = false) annotation(
-      Placement(visible = true, transformation(origin = {-48, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Fluid.Sources.Boundary_ph boundary_start(redeclare package Medium = fluid, nPorts = 1, use_h_in = true, use_p_in = true) annotation(
-      Placement(visible = true, transformation(origin = {-60, -26}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
-    Modelica.Fluid.Sources.Boundary_pT boundary(redeclare package Medium = fluid, nPorts = 1, use_p_in = true) annotation(
-      Placement(visible = true, transformation(origin = {4, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Blocks.Sources.Constant const_p_tank(k = 101325) annotation(
-      Placement(visible = true, transformation(origin = {-84, -64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpy(redeclare package Medium = fluid) annotation(
-      Placement(visible = true, transformation(origin = {36, -84}, extent = {{10, 10}, {-10, -10}}, rotation = 0)));
-  equation
-    connect(ramp.y, pump1.N_in) annotation(
-      Line(points = {{-22, 50}, {0, 50}, {0, 16}}, color = {0, 0, 127}));
-    connect(pump1.port_b, pipe.port_a) annotation(
-      Line(points = {{10, 6}, {22, 6}}, color = {0, 127, 255}));
-    connect(boundary_start.ports[1], volume.ports[1]) annotation(
-      Line(points = {{-60, -16}, {-60, 6}, {-48, 6}}, color = {0, 127, 255}));
-    connect(volume.ports[2], pump1.port_a) annotation(
-      Line(points = {{-48, 6}, {-10, 6}}, color = {0, 127, 255}));
-    connect(const_p_tank.y, boundary_start.p_in) annotation(
-      Line(points = {{-73, -64}, {-68, -64}, {-68, -38}}, color = {0, 0, 127}));
-    connect(boundary.p_in, const_p_tank.y) annotation(
-      Line(points = {{-8, -64}, {-73, -64}}, color = {0, 0, 127}));
-    connect(pipe.port_b, specificEnthalpy.port) annotation(
-      Line(points = {{42, 6}, {64, 6}, {64, -74}, {36, -74}}, color = {0, 127, 255}));
-    connect(specificEnthalpy.port, boundary.ports[1]) annotation(
-      Line(points = {{36, -74}, {25, -74}, {25, -72}, {14, -72}}, color = {0, 127, 255}));
-    connect(specificEnthalpy.h_out, boundary_start.h_in) annotation(
-      Line(points = {{25, -84}, {-64, -84}, {-64, -38}}, color = {0, 0, 127}));
-    annotation(
-      Diagram(graphics = {Text(origin = {20, 60}, extent = {{-6, 4}, {6, -4}}, textString = "text")}, coordinateSystem(extent = {{-100, -100}, {100, 100}})));
-  end pump_heater;
-
   model pumpheater2
     extends Modelica.Icons.Example;
     //----------
@@ -876,6 +833,54 @@ package A
       Diagram(coordinateSystem(extent = {{-160, -140}, {240, 140}}, initialScale = 0.1)),
       __OpenModelica_commandLineOptions = "");
   end heatExchanger;
+
+  model pumpingSystem_ex01_test1
+    replaceable package fluid = Modelica.Media.Water.StandardWaterOnePhase;
+    inner Modelica.Fluid.System system annotation(
+      Placement(visible = true, transformation(origin = {-50, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Modelica.Fluid.Pipes.StaticPipe pipe(redeclare package Medium = fluid, diameter = 0.05, length = 0.5, nParallel = 1) annotation(
+      Placement(visible = true, transformation(origin = {92, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Modelica.Fluid.Sources.Boundary_pT boundary_end(redeclare package Medium = fluid, nPorts = 1, p = 101.325*1000) annotation(
+      Placement(visible = true, transformation(origin = {162, 30}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
+    Modelica.Blocks.Sources.Ramp ramp1(duration = 10, height = 1000, offset = 1000, startTime = 10) annotation(
+      Placement(visible = true, transformation(origin = {-70, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Modelica.Fluid.Machines.PrescribedPump pump(redeclare package Medium = fluid, N_nominal = 1000, T_start = 273.15 + 20, V(displayUnit = "l") = 0.001, checkValve = true, redeclare function efficiencyCharacteristic = Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics.constantEfficiency(eta_nominal = 0.9), energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, redeclare function flowCharacteristic = Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics.quadraticFlow(V_flow_nominal = {0, 0.25, 0.5}, head_nominal = {100, 60, 0}), m_flow_start = 10, massDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, nParallel = 1, p_a_start = 101325, p_b_start = 101325, use_N_in = true, use_T_start = true) annotation(
+      Placement(visible = true, transformation(origin = {-40, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Modelica.Fluid.Sensors.VolumeFlowRate volumeFlowRate1(redeclare package Medium = fluid) annotation(
+      Placement(visible = true, transformation(origin = {32, 30}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
+    Modelica.Fluid.Sensors.MassFlowRate massFlowRate1(redeclare package Medium = fluid) annotation(
+      Placement(visible = true, transformation(origin = {62, 30}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
+    Modelica.Fluid.Sensors.SpecificEnthalpyTwoPort specificEnthalpy(redeclare package Medium = fluid) annotation(
+      Placement(visible = true, transformation(origin = {126, 30}, extent = {{-10, 10}, {10, -10}}, rotation = 0)));
+    Modelica.Fluid.Sources.Boundary_ph boundary_beg(redeclare package Medium = fluid, nPorts = 1, p = 101.325*1000, use_h_in = true) annotation(
+      Placement(visible = true, transformation(origin = {-72, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Fluid.Vessels.ClosedVolume volume(redeclare package Medium = fluid, T_start = 273.15 + 30, V = 1, energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, massDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, nPorts = 2, p_start = 101325, use_HeatTransfer = false, use_T_start = true, use_portsData = false) annotation(
+      Placement(visible = true, transformation(origin = {-4, 66}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  equation
+    connect(ramp1.y, pump.N_in) annotation(
+      Line(points = {{-59, 60}, {-40, 60}, {-40, 40}}, color = {0, 0, 127}));
+    connect(volumeFlowRate1.port_b, massFlowRate1.port_a) annotation(
+      Line(points = {{42, 30}, {52, 30}, {52, 30}, {52, 30}}, color = {0, 127, 255}));
+    connect(massFlowRate1.port_b, pipe.port_a) annotation(
+      Line(points = {{72, 30}, {82, 30}, {82, 30}, {82, 30}}, color = {0, 127, 255}));
+    connect(pipe.port_b, specificEnthalpy.port_a) annotation(
+      Line(points = {{102, 30}, {116, 30}}, color = {0, 127, 255}));
+    connect(specificEnthalpy.port_b, boundary_end.ports[1]) annotation(
+      Line(points = {{136, 30}, {152, 30}}, color = {0, 127, 255}));
+    connect(specificEnthalpy.h_out, boundary_beg.h_in) annotation(
+      Line(points = {{126, 19}, {126, -28}, {-84, -28}, {-84, 34}}, color = {0, 0, 127}));
+    connect(boundary_beg.ports[1], pump.port_a) annotation(
+      Line(points = {{-62, 30}, {-50, 30}}, color = {0, 127, 255}));
+  connect(pump.port_b, volume.ports[1]) annotation(
+      Line(points = {{-30, 30}, {-4, 30}, {-4, 56}}, color = {0, 127, 255}));
+  connect(volume.ports[2], volumeFlowRate1.port_a) annotation(
+      Line(points = {{-4, 56}, {10, 56}, {10, 30}, {22, 30}}, color = {0, 127, 255}));
+    annotation(
+      experiment(StartTime = 0, StopTime = 40, Tolerance = 1e-06, Interval = 0.08),
+      __OpenModelica_simulationFlags(lv = "LOG_STATS", outputFormat = "mat", s = "dassl"),
+      Diagram(coordinateSystem(extent = {{-100, -100}, {100, 100}})),
+      __OpenModelica_commandLineOptions = "");
+  end pumpingSystem_ex01_test1;
   annotation(
     uses(Modelica(version = "4.0.0")));
 end A;
